@@ -9,6 +9,7 @@ func _ready():
 	$Ball.hide()
 	$"GameWin".hide()
 	$"GameLost".hide()
+	start_color_swap()
 
 func _process(delta):
 	if Input.is_action_just_pressed("ui_select") and not game_started:
@@ -22,6 +23,13 @@ func _process(delta):
 		$Ball.show()
 		$Ball.new_ball()
 		$StartText.hide() # Hide the StartText label
+		
+
+func start_color_swap():
+	# This will loop indefinitely until game_started is false
+	while game_started == false:
+		color_swap()
+		await get_tree().create_timer(0.5).timeout  # Adjust the delay as needed
 
 func _on_ball_timer_timeout():
 	if game_started:
@@ -48,3 +56,20 @@ func check_game_end():
 			$"GameWin".show()
 		else:
 			$"GameLost".show()
+		start_color_swap()
+
+func color_swap():	
+	if $StartText.modulate == Color(1, 1, 1):
+		$StartText.modulate = Color(1, 1, 0)
+	else: 
+		$StartText.modulate = Color(1, 1, 1)
+
+	if $GameWin.modulate == Color(1, 1, 1):
+		$GameWin.modulate = Color(1, 1, 0)
+	else: 
+		$GameWin.modulate = Color(1, 1, 1)
+
+	if $GameLost.modulate == Color(1, 1, 1):
+		$GameLost.modulate = Color(1, 0, 0)
+	else: 
+		$GameLost.modulate = Color(1, 1, 1)
