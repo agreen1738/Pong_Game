@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 var win_size : Vector2
-const START_SPEED : int = 500
+var START_SPEED : int = 500
 const ACCEl : int = 50
 var speed : int
 var dir : Vector2
@@ -15,11 +15,11 @@ func new_ball():
 	#randomize start position and direction
 	position.x = win_size.x / 2
 	position.y = randi_range(200, win_size.y - 200)
-	speed = START_SPEED
+	speed = 500
 	dir = random_direction()
 	
 func _physics_process(delta):
-	var collision = move_and_collide(dir * speed * delta) 
+	var collision = move_and_collide(dir * speed * delta)
 	var collider
 	if collision:
 		collider = collision.get_collider()

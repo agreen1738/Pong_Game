@@ -1,11 +1,15 @@
 extends Sprite2D
 
 var score := [0, 0] # 0: Player, 1: CPU
-const PADDLE_SPEED : int = 500
+var PADDLE_SPEED : int = 500
 var game_started := false # Boolean to track if the game has started
+var start_position_player = Vector2(50, 324)
+var start_position_cpu = Vector2(1082, 324)
+var start_position_ball = Vector2(576, 324)
 
 func _ready():
 	# Hide the ball initially
+	PADDLE_SPEED = 0
 	$Ball.hide()
 	$"GameWin".hide()
 	$"GameLost".hide()
@@ -13,7 +17,12 @@ func _ready():
 
 func _process(delta):
 	if Input.is_action_just_pressed("ui_select") and not game_started:
+		$Player.position = start_position_player
+		$CPU.position = start_position_cpu
+		$Ball.position = start_position_ball
 		game_started = true
+		PADDLE_SPEED = 500
+		$Ball.speed = 500
 		$"GameWin".hide()
 		$"GameLost".hide()
 		$HUD/PlayerScore.text = str(0)
@@ -21,7 +30,6 @@ func _process(delta):
 		$HUD/CPUScore.text = str(0)
 		score[1] = 0
 		$Ball.show()
-		$Ball.new_ball()
 		$StartText.hide() # Hide the StartText label
 		
 
@@ -29,7 +37,7 @@ func start_color_swap():
 	# This will loop indefinitely until game_started is false
 	while game_started == false:
 		color_swap()
-		await get_tree().create_timer(0.5).timeout  # Adjust the delay as needed
+		await get_tree().create_timer(0.75).timeout  # Adjust the delay as needed
 
 func _on_ball_timer_timeout():
 	if game_started:
@@ -51,12 +59,18 @@ func check_game_end():
 	if score[0] >= 3 or score[1] >= 3:
 		#Game Ends
 		$Ball.hide()
+		$Player.position = start_position_player
+		$CPU.position = start_position_cpu
+		$Ball.position = start_position_ball
+		PADDLE_SPEED = 0
+		$Ball.speed = 0
 		game_started = false
 		if score[0] > score[1]:
 			$"GameWin".show()
 		else:
 			$"GameLost".show()
 		start_color_swap()
+		print(str($Ball.position))
 
 func color_swap():	
 	if $StartText.modulate == Color(1, 1, 1):
