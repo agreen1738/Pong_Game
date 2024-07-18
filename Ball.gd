@@ -3,7 +3,7 @@ extends CharacterBody2D
 var win_size : Vector2
 var START_SPEED : int = 500
 const ACCEl : int = 50
-var speed : int
+var speed : int = 0 
 var dir : Vector2
 const MAX_Y_VECTOR : float = 0.6
 
